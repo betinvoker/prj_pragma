@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<a href="{% url 'manager_users' %}" class="btn btn-secondary mb-3">&larr; Назад к списку</a>
+<h2>Клиент #{{ client.id }}</h2>
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">Информация о клиенте</h5>
+    <table class="table table-borderless">
+      <tr><th>ФИО:</th><td>{{ client.last_name|default:"" }} {{ client.first_name|default:"" }} {{ client.patronymic|default:"" }}</td></tr>
+      <tr><th>Компания:</th><td>{{ client.company|default:"-" }}</td></tr>
+      <tr><th>Телефон:</th><td>{{ client.phone|default:"-" }}</td></tr>
+      <tr><th>Email:</th><td>{{ client.email|default:"-" }}</td></tr>
+      <tr><th>Адрес:</th><td>{{ client.address|default:"-" }}</td></tr>
+      <tr><th>Дата регистрации:</th><td>{{ client.created_at|date:"d.m.Y H:i" }}</td></tr>
+    </table>
+  </div>
+</div>
+<h3>История заказов</h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Дата</th>
+      <th>Статус</th>
+      <th>Менеджер</th>
+      <th>Сумма</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for order in orders %}
+    <tr>
+      <td>{{ order.id }}</td>
+      <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
+      <td>
+        {% if order.status == "NEW" %}<span class="badge bg-primary">Новый</span>
+        {% elif order.status == "PROCESSING" %}<span class="badge bg-warning">В обработке</span>
+        {% elif order.status == "COMPLETED" %}<span class="badge bg-success">Завершено</span>
+        {% elif order.status == "CANCELLED" %}<span class="badge bg-danger">Отменено</span>
+        {% endif %}
+      </td>
+      <td>{{ order.managed_by|default:"-" }}</td>
+      <td>{{ order.total_amount }} ₽</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5" class="text-center">Заказы не найдены</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

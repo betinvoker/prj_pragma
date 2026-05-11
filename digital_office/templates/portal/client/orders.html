@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Мои заказы</h2>
+{% for o in orders %}
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <strong>Заказ #{{ o.id }}</strong>
+        <span class="badge bg-secondary">{{ o.get_status_display }}</span>
+      </div>
+      <div class="text-end">
+        <div class="fw-bold">{{ o.total_amount }} ₽</div>
+        <div class="text-muted" style="font-size:12px;">{{ o.created_at|date:"d.m.Y H:i" }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body border-top">
+    <h6 class="mb-2">Товары:</h6>
+    <ul class="mb-3">
+      {% for it in o.items.all %}
+      <li>{{ it.quantity }} x {{ it.item.name }} @ {{ it.price }} ₽</li>
+      {% endfor %}
+    </ul>
+    {% if o.documents.all %}
+    <h6 class="mb-2">Документы:</h6>
+    <div class="d-flex flex-wrap gap-2">
+      {% for doc in o.documents.all %}
+      <a href="{% url 'document_download_client' doc_id=doc.id %}" class="btn btn-sm btn-outline-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-file-earmark-text me-1" viewBox="0 0 16 16">
+          <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+          <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v7a.5.5 0 0 1-1 0V1a.5.5 0 0 1 1 0z"/>
+        </svg>
+        {{ doc.title }}
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% empty %}
+<p>Нет заказов.</p>
+{% endfor %}
+{% endblock %}

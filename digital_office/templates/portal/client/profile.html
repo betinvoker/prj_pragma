@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body p-4">
+        <div class="d-flex align-items-center mb-4">
+          <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="primary" class="bi bi-person-fill" viewBox="0 0 16 16">
+              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+            </svg>
+          </div>
+          <div>
+            <h4 class="mb-0">Личный кабинет</h4>
+            <p class="text-muted mb-0">
+              {% if form.instance.last_name or form.instance.first_name or form.instance.patronymic %}
+                {{ form.instance.last_name|default:'' }} {{ form.instance.first_name|default:'' }} {{ form.instance.patronymic|default:'' }}
+              {% else %}
+                Управление профилем
+              {% endif %}
+              {% if form.instance.company %} — {{ form.instance.company }}{% endif %}
+            </p>
+          </div>
+        </div>
+        
+        <hr class="my-4">
+        
+        <form method="post" class="needs-validation" novalidate>
+          {% csrf_token %}
+          
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Логин</label>
+              <input type="text" name="name" class="form-control" value="{{ form.name.value|default:form.instance.name|default:'' }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Название компании</label>
+              <input type="text" name="company" class="form-control" value="{{ form.company.value|default:form.instance.company|default:'' }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Фамилия</label>
+              <input type="text" name="last_name" class="form-control" value="{{ form.last_name.value|default:form.instance.last_name|default:'' }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Имя</label>
+              <input type="text" name="first_name" class="form-control" value="{{ form.first_name.value|default:form.instance.first_name|default:'' }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Отчество</label>
+              <input type="text" name="patronymic" class="form-control" value="{{ form.patronymic.value|default:form.instance.patronymic|default:'' }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Email</label>
+              <input type="email" name="email" class="form-control" value="{{ form.email.value|default:form.instance.email|default:'' }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Телефон</label>
+              <input type="tel" name="phone" class="form-control" value="{{ form.phone.value|default:form.instance.phone|default:'' }}">
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Адрес</label>
+              <textarea name="address" class="form-control" rows="2">{{ form.address.value|default:form.instance.address|default:'' }}</textarea>
+            </div>
+          </div>
+          
+          <div class="d-flex gap-2 mt-4">
+            <button class="btn btn-primary px-4" type="submit">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg me-1" viewBox="0 0 16 16">
+                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022z"/>
+              </svg>
+              Сохранить
+            </button>
+            <a href="{% url 'client_dashboard' %}" class="btn btn-outline-secondary">Отмена</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row mb-4">
+  <div class="col-12">
+    <h2>Документы</h2>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white">
+        <button class="btn btn-link text-decoration-none w-100 text-start d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#uploadForm">
+          <span><h5 class="mb-0">Загрузка документа</h5></span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="collapse" id="uploadForm">
+        <div class="card-body">
+          <form method="post" enctype="multipart/form-data" action="{% url 'document_upload' %}">
+            {% csrf_token %}
+            {% if form %}
+            <div class="mb-3">
+              <label class="form-label">Название документа</label>
+              <input type="text" name="title" class="form-control" required>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Тип документа</label>
+                <select name="doc_type" class="form-select">
+                  <option value="INV">Счет-фактура</option>
+                  <option value="CTR">Договор</option>
+                  <option value="AGR">Соглашение</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Клиент</label>
+                <select name="client" class="form-select">
+                  <option value="">-- Не выбран --</option>
+                  {% for c in clients %}
+                  <option value="{{ c.id }}">{{ c.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Заказ</label>
+                <select name="order" class="form-select">
+                  <option value="">-- Не выбран --</option>
+                  {% for o in orders %}
+                  <option value="{{ o.id }}">Заказ #{{ o.id }} - {{ o.client.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Файл</label>
+                <input type="file" name="file" class="form-control">
+              </div>
+            </div>
+            <button class="btn btn-primary mt-3" type="submit">Загрузить документ</button>
+            {% else %}
+            <p class="text-muted">Форма загрузки не доступна.</p>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+  <div class="card-body">
+    <h5 class="card-title mb-3">Поиск документа</h5>
+    <form method="get" class="d-flex gap-2">
+      <input type="text" name="search" class="form-control" placeholder="ID или название документа / клиент / #ID заказа" value="{{ search|default:'' }}">
+      <button type="submit" class="btn btn-outline-primary">Найти</button>
+      {% if search %}
+      <a href="{% url 'manager_documents' %}" class="btn btn-outline-secondary">Очистить</a>
+      {% endif %}
+    </form>
+
+    <br>
+
+    <h5 class="card-title mb-3">Список документов</h5>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>Тип</th>
+            <th>Клиент</th>
+            <th>Заказ</th>
+            <th>Дата создания</th>
+            <th>Действие</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for d in documents %}
+          <tr>
+            <td>{{ d.id }}</td>
+            <td>{{ d.title }}</td>
+            <td>
+              {% if d.doc_type == 'INV' %}<span class="badge bg-primary">Счет-фактура</span>
+              {% elif d.doc_type == 'CTR' %}<span class="badge bg-success">Договор</span>
+              {% elif d.doc_type == 'AGR' %}<span class="badge bg-info">Соглашение</span>
+              {% endif %}
+            </td>
+            <td>{{ d.client.name|default:'—' }}</td>
+            <td>{% if d.order %}<a href="{% url 'manager_order_detail' d.order.id %}">#{{ d.order.id }}</a>{% else %}—{% endif %}</td>
+            <td>{{ d.created_at|date:"d.m.Y H:i" }}</td>
+            <td>
+              <a href="{% url 'document_download' doc_id=d.id %}" class="btn btn-sm btn-outline-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-download me-1" viewBox="0 0 16 16">
+                  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                  <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                </svg>
+                Скачать
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7" class="text-center text-muted">Документы не найдены</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

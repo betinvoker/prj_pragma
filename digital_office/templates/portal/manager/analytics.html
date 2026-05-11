@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Аналитика</h2>
+
+<div class="row mb-4">
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title text-muted">Клиенты</h5>
+        <h2 class="mb-0">{{ data.clients }}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title text-muted">Товары</h5>
+        <h2 class="mb-0">{{ data.catalog_items }}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title text-muted">Заказы</h5>
+        <h2 class="mb-0">{{ data.orders }}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title text-muted">Средний чек</h5>
+        <h2 class="mb-0">{{ data.avg_check|floatformat:2 }} ₽</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Топ-10 клиентов по количеству заказов</h5>
+      </div>
+      <div class="card-body">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Клиент</th>
+              <th>Заказов</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for client in data.top_by_orders %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ client.name }}</td>
+              <td>{{ client.order_count }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3" class="text-center text-muted">Нет данных</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Топ-10 клиентов по среднему чеку</h5>
+      </div>
+      <div class="card-body">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Клиент</th>
+              <th>Средний чек</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for client in data.top_by_avg_check %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ client.name }}</td>
+              <td>{{ client.avg_order|floatformat:2 }} ₽</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3" class="text-center text-muted">Нет данных</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

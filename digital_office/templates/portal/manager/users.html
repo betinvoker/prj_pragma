@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Клиенты</h2>
+<form method="get" class="mb-4">
+  <div class="row">
+    <div class="col-md-8">
+      <input type="text" name="q" class="form-control" placeholder="Поиск по ФИО, ID, компании, телефону" value="{{ q }}">
+    </div>
+    <div class="col-md-4">
+      <button type="submit" class="btn btn-primary w-100">Найти</button>
+    </div>
+  </div>
+</form>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>ФИО</th>
+      <th>Компания</th>
+      <th>Телефон</th>
+      <th>Email</th>
+      <th>Дата регистрации</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in clients %}
+    <tr>
+      <td><a href="{% url 'manager_client_detail' c.id %}">{{ c.id }}</a></td>
+      <td>{{ c.last_name }} {{ c.first_name }} {{ c.patronymic }}</td>
+      <td>{{ c.company|default:"-" }}</td>
+      <td>{{ c.phone|default:"-" }}</td>
+      <td>{{ c.email|default:"-" }}</td>
+      <td>{{ c.created_at|date:"d.m.Y" }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6" class="text-center">Клиенты не найдены</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1>Веб-интерфейс</h1>
+      <p class="text-muted">Дашборд для управления клиентами и каталогом</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header">Добавить клиента</div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="client">
+            {{ form_client.as_p }}
+            <button class="btn btn-primary" type="submit">Сохранить</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header">Добавить товар</div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="catalog">
+            {{ form_catalog.as_p }}
+            <button class="btn btn-primary" type="submit">Сохранить</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header">Список клиентов</div>
+        <div class="card-body p-0"><table class="table mb-0"><thead><tr><th>ID</th><th>Имя</th><th>Email</th><th>Телефон</th></tr></thead><tbody>
+          {% for c in clients %}
+          <tr><td>{{ c.id }}</td><td>{{ c.name }}</td><td>{{ c.email }}</td><td>{{ c.phone }}</td></tr>
+          {% empty %}<tr><td colspan="4">Нет клиентов</td></tr>{% endfor %}
+        </tbody></table></div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header">Каталог товаров</div>
+        <div class="card-body p-0"><table class="table mb-0"><thead><tr><th>ID</th><th>Название</th><th>Цена</th><th>На складе</th></tr></thead><tbody>
+          {% for item in catalogs %}
+          <tr><td>{{ item.id }}</td><td>{{ item.name }}</td><td>{{ item.price }}</td><td>{{ item.stock }}</td></tr>
+          {% empty %}<tr><td colspan="4">Нет товаров</td></tr>{% endfor %}
+        </tbody></table></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,33 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path("health/", views.health),
+    path("web/", views.web_home, name="web_home"),
+    path("portal/client/", views.client_dashboard, name="client_dashboard"),
+    path("portal/client/item/<int:item_id>/", views.client_item_detail, name="client_item_detail"),
+    path("portal/manager/", views.manager_dashboard, name="manager_dashboard"),
+    path("portal/client/cart/add/", views.cart_add, name="cart_add"),
+    path("portal/client/cart/", views.cart_view, name="cart_view"),
+    path("portal/client/cart/update/", views.cart_update, name="cart_update"),
+    path("portal/client/cart/remove/", views.cart_remove, name="cart_remove"),
+    path("portal/client/checkout/", views.checkout, name="checkout"),
+    path("portal/client/orders/", views.client_orders, name="client_orders"),
+    path("portal/client/documents/", views.client_documents, name="client_documents"),
+    path("portal/client/ai/", views.client_ai, name="client_ai"),
+    path("portal/manager/catalog/", views.manager_catalog, name="manager_catalog"),
+    path("portal/manager/catalog/add/", views.manager_catalog_add, name="manager_catalog_add"),
+    path("portal/manager/item/<int:item_id>/", views.manager_item_detail, name="manager_item_detail"),
+    path("portal/manager/orders/", views.manager_orders, name="manager_orders"),
+    path("portal/manager/order/<int:order_id>/", views.manager_order_detail, name="manager_order_detail"),
+    path("portal/manager/users/", views.manager_users, name="manager_users"),
+    path("portal/manager/client/<int:client_id>/", views.manager_client_detail, name="manager_client_detail"),
+    path("portal/manager/documents/", views.manager_documents, name="manager_documents"),
+    path("portal/manager/documents/upload/", views.document_upload, name="document_upload"),
+    path("portal/client/signup/", views.client_signup, name="client_signup"),
+    path("portal/client/profile/", views.client_profile, name="client_profile"),
+    path("portal/manager/profile/", views.manager_profile, name="manager_profile"),
+    path("portal/manager/documents/download/<int:doc_id>/", views.document_download, name="document_download"),
+    path("portal/client/documents/download/<int:doc_id>/", views.document_download, name="document_download_client"),
+    path("portal/manager/analytics/", views.manager_analytics, name="manager_analytics"),
+]
