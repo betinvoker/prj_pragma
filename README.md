@@ -96,13 +96,45 @@ prj_pragma/
 └── README.md             # Этот файл
 ```
 
-## API
+## Ссылки на страницы
 
-Проект использует Django REST Framework с JWT-аутентификацией.
+### Публичные
+| Страница | URL |
+|----------|-----|
+| Главная веб-страница | `/web/` |
+| Регистрация клиента | `/portal/client/signup/` |
+| Корзина | `/portal/client/cart/` |
+| AI-ассистент | `/portal/client/ai/` |
 
-Эндпоинты аутентификации:
-- `POST /api/token/` — получение токенов
-- `POST /api/token/refresh/` — обновление access-токена
+### Клиентский портал
+| Страница | URL |
+|----------|-----|
+| Панель клиента | `/portal/client/` |
+| Детали товара | `/portal/client/item/<id>/` |
+| Оформление заказа | `/portal/client/checkout/` |
+| Мои заказы | `/portal/client/orders/` |
+| Мои документы | `/portal/client/documents/` |
+| Профиль | `/portal/client/profile/` |
+
+### Панель управления (Manager)
+| Страница | URL |
+|----------|-----|
+| Панель менеджера | `/portal/manager/` |
+| Каталог товаров | `/portal/manager/catalog/` |
+| Добавление товара | `/portal/manager/catalog/add/` |
+| Управление заказами | `/portal/manager/orders/` |
+| Детали заказа | `/portal/manager/order/<id>/` |
+| Пользователи | `/portal/manager/users/` |
+| Клиент | `/portal/manager/client/<id>/` |
+| Документы | `/portal/manager/documents/` |
+| Загрузка документа | `/portal/manager/documents/upload/` |
+| Аналитика | `/portal/manager/analytics/` |
+| Профиль менеджера | `/portal/manager/profile/` |
+
+### Администрирование
+| Страница | URL |
+|----------|-----|
+| Django Admin | `/admin/` |
 
 ## Команды Django
 
